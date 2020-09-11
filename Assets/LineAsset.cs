@@ -39,7 +39,7 @@ public class LineAsset : MonoBehaviour
         {
             foreach (VerticeAngle a in allAngles)
             {
-                allVertices[lineRenderer.positionCount] = allAngles[lineRenderer.positionCount].transform.position;
+               allVertices[lineRenderer.positionCount] = allAngles[lineRenderer.positionCount].transform.position;
                
                 if(lineRenderer.positionCount < allAngles.Count-1)
                     AddColliderToLine(allAngles[lineRenderer.positionCount].transform.position, allAngles[lineRenderer.positionCount + 1].transform.position);

@@ -4,44 +4,76 @@ using UnityEngine;
 
 public class Confirmations : MonoBehaviour
 {
-    int id = 1;
+    int id;
     public void Init()
     {
         int totalAngles = MappingManager.Instance.verticeAngleManager.all.Count - 1;
-        SetNext();
+        id = 1;
+        SetNextConfirm();
     }
-    public void SetNext()
+    public void SetNextConfirm()
     { 
         foreach (SingleLineAsset line in MappingManager.Instance.verticeAngleManager.lineAsset.allLines)
             line.SetOn(false);
 
         if (MappingManager.Instance.state == MappingManager.states.CONFIRM_SIZE)
         {
-            MappingManager.Instance.verticeAngleManager.lineAsset.allLines[id - 1].SetOn(true);
-            if (MappingManager.Instance.ui.distances.Count > id)
+            int nextDistanceID = GetNextDistance();
+
+            if (nextDistanceID >= MappingManager.Instance.verticeAngleManager.data.Count)
+                EndDistanceConfig();
+            else if (nextDistanceID > 0)
             {
-                MappingManager.Instance.ui.distances[id].gameObject.SetActive(true);
-                id++;
+                MappingManager.Instance.verticeAngleManager.lineAsset.allLines[nextDistanceID - 1].SetOn(true);
+                MappingManager.Instance.uiMapping.distances[nextDistanceID].gameObject.SetActive(true);
             }
-            else
-            {
-                MappingManager.Instance.ConfirmAngles();
-                id = 0;
-            }            
         }
         else if (MappingManager.Instance.state == MappingManager.states.CONFIRM_ANGLES)
         {
-            if (MappingManager.Instance.ui.distances.Count > id)
-            {
-                MappingManager.Instance.ui.distances[id].gameObject.SetActive(true);
-                id++;
-            }
-            else
-            {
-                MappingManager.Instance.ConfirmAngles();
-                id = 0;
-            }
+            int nextAngleID = GetNextAngle();
 
+            if (nextAngleID >= MappingManager.Instance.verticeAngleManager.data.Count-1)
+                EndAnglesConfig();
+            else if (nextAngleID > 0)
+                MappingManager.Instance.uiMapping.angles[nextAngleID].gameObject.SetActive(true);
         }
+
+
+    }
+    void EndDistanceConfig()
+    {
+       // MappingManager.Instance.ui.distances[0].gameObject.SetActive(true);
+        MappingManager.Instance.ConfirmAngles();
+        id = 1;
+        SetNextConfirm();
+    }
+    void EndAnglesConfig()
+    {
+        MappingManager.Instance.uiMapping.angles[MappingManager.Instance.uiMapping.angles.Count-1].gameObject.SetActive(true);
+        MappingManager.Instance.uiMapping.angles[0].gameObject.SetActive(true);
+        MappingManager.Instance.uiMapping.distances[0].gameObject.SetActive(true);
+        Debug.Log("EndAnglesConfig");
+    }
+    int GetNextDistance()
+    {
+        int id = 1;
+        foreach (VerticeAngleManager.VerticeData data in MappingManager.Instance.verticeAngleManager.data)
+        {
+            if (!data.distanceChecked)
+                return id;
+            id++;
+        }
+        return 0;
+    }
+    int GetNextAngle()
+    {
+        int id = 1;
+        foreach (VerticeAngleManager.VerticeData data in MappingManager.Instance.verticeAngleManager.data)
+        {
+            if (!data.angleChecked)
+                return id;
+            id++;
+        }
+        return 0;
     }
 }

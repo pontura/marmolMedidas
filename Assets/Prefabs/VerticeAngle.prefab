@@ -58,6 +58,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3187d1262bf4c14d9729988945c2cd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 0
+  angle: 0
+  distance_in_pixels: 0
   isLastAngle: 0
   asset: {fileID: 4705357554221391287}
 --- !u!1 &4705357554221391287
@@ -118,7 +121,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: dd75a853d00c6cd4990dc2f9d0cae4f1, type: 2}
+  - {fileID: 2100000, guid: 6fd4452432e3bf4488ae681e9cc40b33, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

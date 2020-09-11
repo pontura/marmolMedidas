@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIMapping : MonoBehaviour
 {
@@ -12,15 +13,24 @@ public class UIMapping : MonoBehaviour
     public Transform container;
     [HideInInspector] public UIAngleInputPanel angleInputPanel;
     [HideInInspector] public UISizeInputPanel sizeInputPanel;
-
-    void Start()
+    
+    UITools uiTools;
+    private void Start()
     {
+        uiTools = GetComponent<UITools>();
+    }
+
+    public void Init()
+    {
+        uiTools.Init();
         Events.ReCalculateAll += ReCalculateAll;
         Events.DeleteAll += DeleteAll;
 
         angleInputPanel = GetComponent<UIAngleInputPanel>();
         sizeInputPanel = GetComponent<UISizeInputPanel>();
     }
+   
+   
     void OnDestroy()
     {
         Events.ReCalculateAll -= ReCalculateAll;
@@ -65,5 +75,6 @@ public class UIMapping : MonoBehaviour
     void DeleteAll()
     {
         Utils.RemoveAllChildsIn(container);
+        MappingManager.Instance.Reset();
     }
 }

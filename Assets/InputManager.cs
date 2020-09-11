@@ -33,9 +33,5 @@ public class InputManager : MonoBehaviour
                     mappingManager.ClickOnFloor(pos);
             }
         }
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            MappingManager.Instance.verticeAngleManager.ChangeAngle(2, 15);
-        }
     }
 }

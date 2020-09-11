@@ -1,22 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class UITools : MonoBehaviour
+public class UIIntro : MonoBehaviour
 {
     public GameObject panel;
+    UIMain uiMain;
 
-    private void Start()
-    {
-        panel.SetActive(false);
-    }
     public void Init()
     {
+        uiMain = GetComponent<UIMain>();
         panel.SetActive(true);
     }
-    public void DeleteAll()
+
+    public void Clicked(int id)
     {
-        Events.DeleteAll();
+        uiMain.InitMapping(id);
+        panel.SetActive(false);
     }
 }

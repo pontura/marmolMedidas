@@ -12,6 +12,32 @@ public class VerticeAngleManager : MonoBehaviour
     {
         public float angle;
         public float distance;
+        public bool distanceChecked;
+        public bool angleChecked;
+    }
+    private void Start()
+    {
+        Events.DeleteAll += DeleteAll;
+        angleDistanceRemapping = GetComponent<AnglesDistanceRemapping>();
+    }
+    private void OnDestroy()
+    {
+        Events.DeleteAll -= DeleteAll;
+    }
+
+    public void ConfirmDistance(int id)
+    {       
+        data[id].distanceChecked = true;
+    }
+    public void ForceSquaredFigure()
+    {
+        Vector3 pos = all[2].transform.position;
+        pos.y = all[3].transform.position.y;
+        all[3].transform.position = pos;
+    }
+    public void ConfirmAngle(int id)
+    {
+        data[id].angleChecked = true;
     }
     public VerticeData GetVerticeData(int angleID)
     {
@@ -30,14 +56,24 @@ public class VerticeAngleManager : MonoBehaviour
     public LineAsset lineAsset;
     AnglesDistanceRemapping angleDistanceRemapping;
 
-    private void Start()
+    public float GetDistanceInCm(float pixels)
     {
-        Events.DeleteAll += DeleteAll;
-        angleDistanceRemapping = GetComponent<AnglesDistanceRemapping>();
+        return pixels * normalizedDistance;
     }
-    private void OnDestroy()
+  
+    public void RefreshVerticeData()
     {
-        Events.DeleteAll -= DeleteAll;
+        int id = 0;
+        foreach(VerticeAngle va in all)
+        {
+            float lastDistance_in_pixels = va.distance_in_pixels;
+            if (id == 0)
+                data[data.Count - 1].distance = GetDistanceInCm(lastDistance_in_pixels);
+            else if (id < data.Count)
+                data[id - 1].distance = GetDistanceInCm(lastDistance_in_pixels);
+            id++;
+        }
+       
     }
     public void AddVAngle(Vector3 pos, bool isLast = false)
     {
@@ -51,14 +87,18 @@ public class VerticeAngleManager : MonoBehaviour
     {
         data.Clear();
         foreach (VerticeAngle v in all)
+        {
+            v.SetCollidersOff();
             data.Add(new VerticeData());
+        }
         AddVAngle(all[0].transform.position, true);
         angleDistanceRemapping.Calculate();
     }
-    void DeleteAll()
+    public void DeleteAll()
     {
         Utils.RemoveAllChildsIn(container);
         all.Clear();
+        data.Clear();
     }
     public void ChangeDistance(int angleID, float originalValue, float value)
     {
@@ -91,14 +131,19 @@ public class VerticeAngleManager : MonoBehaviour
         angle2.transform.SetParent(container);
         angle2.transform.localScale = Vector3.one;
 
+        if (!data[angleID - 1].distanceChecked && angleID - 1 == 1 && MappingManager.Instance.forceSquare)
+            ForceSquaredFigure();
+
         Destroy(pivot);
         SetLastVetriceAsFirst();
         angleDistanceRemapping.Calculate();
         lineAsset.Refresh(this);
+        RefreshVerticeData();
     }
-    public void ChangeAngle(int angleID, float value)
+    public void ChangeAngle(int angleID, float originalValue, float value)
     {
-        data[angleID - 1].angle = value;
+        
+        value = originalValue - value;
         GameObject pivot = new GameObject();
         pivot.transform.position = all[angleID].transform.position;
         int id = 0;
@@ -122,6 +167,11 @@ public class VerticeAngleManager : MonoBehaviour
         SetLastVetriceAsFirst();
         angleDistanceRemapping.Calculate();
         lineAsset.Refresh(this);
+
+        if(angleID == 0)
+            data[data.Count].angle = all[angleID].angle;
+        else
+            data[angleID-1].angle = all[angleID].angle;
     }
     void SetLastVetriceAsFirst()
     {

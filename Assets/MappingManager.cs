@@ -19,9 +19,9 @@ public class MappingManager : MonoBehaviour
     static MappingManager mInstance = null;
     public string newScene;
     public Camera cam;
-    public UIMapping ui;
-
-
+    public UIMapping uiMapping;
+    public UIMain ui;
+    public bool forceSquare; // por si eligio partir de un rectangulo:
 
     public static MappingManager Instance
     {
@@ -31,29 +31,41 @@ public class MappingManager : MonoBehaviour
     {
         if (!mInstance)  mInstance = this;
     }
-    void Start()
+    public void Init(bool forceSquare)
     {
-        state = states.SKETCHING;
+        this.forceSquare = forceSquare;
+        gameObject.SetActive(true);
+        uiMapping.Init();
+        ChangeStateTo(states.SKETCHING);
         verticeAngleManager = GetComponent<VerticeAngleManager>();
         confirmations = GetComponent<Confirmations>();
+
+        if(forceSquare)
+            Invoke("ForceSquare", 0.1f);
     }
     public void VerticeClicked(VerticeAngle verticeAngle)
     {
         if (state == states.SKETCHING)
             JumpToConfirm();
         else
-            ui.angleInputPanel.Init(verticeAngle);
+            uiMapping.angleInputPanel.Init(verticeAngle);
     }
     public void SizeClicked(VerticeAngle verticeAngle)
     {
         if (state != states.SKETCHING)
-            ui.sizeInputPanel.Init(verticeAngle);
+            uiMapping.sizeInputPanel.Init(verticeAngle);
     }
     public void JumpToConfirm()
     {
-        verticeAngleManager.CloseFigure();
-        state = states.CONFIRM_SIZE;
-        confirmations.Init();
+        if (verticeAngleManager.all.Count > 2)
+        {
+            verticeAngleManager.CloseFigure();
+            ChangeStateTo( states.CONFIRM_SIZE);
+            confirmations.Init();
+        } else
+        {
+            Reset();
+        }
     }
     public void ClickOnFloor(Vector3 pos)
     {
@@ -62,6 +74,24 @@ public class MappingManager : MonoBehaviour
     }
     public void ConfirmAngles()
     {
-        state = states.CONFIRM_ANGLES;
+        ChangeStateTo( states.CONFIRM_ANGLES);
+    }
+    public void ChangeStateTo(states state)
+    {
+        this.state = state;
+        ui.ChangeState(state);
+    }
+    public void Reset()
+    {
+        ChangeStateTo(states.SKETCHING);
+        verticeAngleManager.DeleteAll();
+    }
+    void ForceSquare()
+    {
+        ClickOnFloor(new Vector3(2, -2, 0));
+        ClickOnFloor(new Vector3(2, 2, 0));
+        ClickOnFloor(new Vector3(-2, 2, 0));
+        ClickOnFloor(new Vector3(-2, -2, 0));
+        VerticeClicked(verticeAngleManager.all[0]);
     }
 }

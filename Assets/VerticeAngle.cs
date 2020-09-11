@@ -6,7 +6,7 @@ public class VerticeAngle : MonoBehaviour
 {
     public int id;
     public float angle;
-    public float distance;
+    public float distance_in_pixels;
     public bool isLastAngle;
     public GameObject asset;
 
@@ -18,5 +18,9 @@ public class VerticeAngle : MonoBehaviour
             asset.SetActive(false);
             GetComponent<Collider>().enabled = false;
         }
+    }
+    public void SetCollidersOff()
+    {
+        GetComponent<Collider>().enabled = false;
     }
 }

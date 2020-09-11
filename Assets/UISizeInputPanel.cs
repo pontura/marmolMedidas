@@ -9,10 +9,12 @@ public class UISizeInputPanel : MonoBehaviour
     int angleID;
     public InputField inputField;
     float originalValue;
+    VerticeAngle verticeAngle;
 
     void Start()
     {
         panel.SetActive(false);
+       
     }
     void Close()
     {
@@ -20,16 +22,26 @@ public class UISizeInputPanel : MonoBehaviour
     }
     public void Init(VerticeAngle verticeAngle)//int angleID, float _originalValue)
     {
-        this.originalValue = verticeAngle.distance;
-        inputField.text = Utils.RoundNumber(verticeAngle.distance, 2).ToString();
+        VerticeAngleManager verticeAngleManager = MappingManager.Instance.verticeAngleManager;
+
+        this.verticeAngle = verticeAngle;
+        float distance = 0;
+
+        if (verticeAngleManager.data[verticeAngle.id- 1].distanceChecked)
+            distance = verticeAngleManager.GetDistanceInCm(verticeAngle.distance_in_pixels);
+
+       
+        this.originalValue = verticeAngle.distance_in_pixels;       
+        inputField.text = Utils.RoundNumber(distance, 2).ToString();
         this.angleID = verticeAngle.id;
         panel.SetActive(true);
     }
     public void SetNewValue (float value)
     {
-        
-        MappingManager.Instance.verticeAngleManager.ChangeDistance(angleID, originalValue, value);
-        MappingManager.Instance.confirmations.SetNext();
+        VerticeAngleManager verticeAngleManager = MappingManager.Instance.verticeAngleManager;
+        verticeAngleManager.ChangeDistance(angleID, originalValue, value);
+        verticeAngleManager.ConfirmDistance(verticeAngle.id - 1);
+        MappingManager.Instance.confirmations.SetNextConfirm();
         Close();
     }
     public void SetValueByField()

@@ -7,17 +7,31 @@ public class DistanceSignal : MonoBehaviour
 {
     public Text field;
     public Image background;
-    VerticeAngle verticeAngle;
+    public VerticeAngle verticeAngle;
 
     public void Init(VerticeAngle _verticeAngle, bool locked)
     {
+        this.verticeAngle = _verticeAngle;
         if (locked)
         {
             GetComponent<Button>().interactable = false;
             background.color = Color.red;
         }
-        this.verticeAngle = _verticeAngle;
-        field.text = Utils.RoundNumber(verticeAngle.distance, 2).ToString() + "cm";
+        else
+        {
+            Invoke("Delayed", 0.1f);
+        }      
+    }
+    void Delayed()
+    {
+        if (MappingManager.Instance.verticeAngleManager.data[verticeAngle.id - 1].distanceChecked)
+        {
+            float distanceInPixels = verticeAngle.distance_in_pixels;
+            float distance = MappingManager.Instance.verticeAngleManager.GetDistanceInCm(distanceInPixels);
+            field.text = Utils.RoundNumber(distance, 2).ToString() + "cm";
+        }
+        else
+            field.text = "?";
     }
     public void Clicked()
     {

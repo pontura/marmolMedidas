@@ -9,6 +9,7 @@ public class UIAngleInputPanel : MonoBehaviour
     int angleID;
     public InputField inputField;
     float originalValue;
+    VerticeAngle verticeAngle;
 
     void Start()
     {
@@ -20,6 +21,7 @@ public class UIAngleInputPanel : MonoBehaviour
     }
     public void Init(VerticeAngle verticeAngle)//int angleID, float _originalValue)
     {
+        this.verticeAngle = verticeAngle;
         this.originalValue = verticeAngle.angle;
         inputField.text = Utils.RoundNumber(verticeAngle.angle, 2).ToString();
         this.angleID = verticeAngle.id;
@@ -27,8 +29,9 @@ public class UIAngleInputPanel : MonoBehaviour
     }
     public void SetNewAngle(float value)
     {
-        MappingManager.Instance.verticeAngleManager.ChangeAngle(angleID, originalValue-value);
-        MappingManager.Instance.confirmations.SetNext();
+        MappingManager.Instance.verticeAngleManager.ChangeAngle(angleID, originalValue, value);
+        MappingManager.Instance.verticeAngleManager.ConfirmAngle(verticeAngle.id - 1);
+        MappingManager.Instance.confirmations.SetNextConfirm();
         Close();
     }
     public void SetValueByField()

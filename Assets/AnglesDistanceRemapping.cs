@@ -39,9 +39,9 @@ public class AnglesDistanceRemapping : MonoBehaviour
 
             verticesAnglesManager.all[mid].id = id;
             verticesAnglesManager.all[mid].angle = angle;
-            verticesAnglesManager.all[mid].distance = Vector3.Distance(firstAngle, midAngle);
+            verticesAnglesManager.all[mid].distance_in_pixels = Vector3.Distance(firstAngle, midAngle);
 
-            MappingManager.Instance.ui.OnAddAngle(verticesAnglesManager.all[mid], verticesAnglesManager.all[first]);
+            MappingManager.Instance.uiMapping.OnAddAngle(verticesAnglesManager.all[mid], verticesAnglesManager.all[first]);
             id++;
         }
 
