@@ -40,7 +40,7 @@ public class UIMain : MonoBehaviour
             case 1:
                 mapping.Init(false);
                 break;
-        }
-        
+        } 
+        Events.OnTutorial(UITutorial.types.MEDIDAS, null);
     }
 }

@@ -16,7 +16,7 @@ public class UISizeInputPanel : MonoBehaviour
         panel.SetActive(false);
        
     }
-    void Close()
+    public void Close()
     {
         panel.SetActive(false);
     }
@@ -35,6 +35,10 @@ public class UISizeInputPanel : MonoBehaviour
         inputField.text = Utils.RoundNumber(distance, 2).ToString();
         this.angleID = verticeAngle.id;
         panel.SetActive(true);
+    }
+    public void Help()
+    {
+        Events.OnTutorial(UITutorial.types.MEDIDAS, null);
     }
     public void SetNewValue (float value)
     {
