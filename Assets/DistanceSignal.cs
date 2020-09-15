@@ -11,14 +11,18 @@ public class DistanceSignal : MonoBehaviour
 
     public void Init(VerticeAngle _verticeAngle, bool locked)
     {
+        field.text = "";
         this.verticeAngle = _verticeAngle;
         if (locked)
         {
             GetComponent<Button>().interactable = false;
             background.color = Color.red;
+            field.text = "?";
+            field.color = Color.white;
         }
         else
         {
+            field.color = Color.black;
             Invoke("Delayed", 0.1f);
         }      
     }
@@ -31,10 +35,17 @@ public class DistanceSignal : MonoBehaviour
             field.text = Utils.RoundNumber(distance, 2).ToString() + "cm";
         }
         else
+        {
             field.text = "?";
+            SetOn();
+        }
     }
     public void Clicked()
     {
         MappingManager.Instance.SizeClicked(verticeAngle);
+    }
+    public void SetOn()
+    {
+        GetComponent<Animation>().Play("distanceOn");
     }
 }

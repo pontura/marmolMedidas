@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4785901618691097372}
   - component: {fileID: 3660943449794869304}
   - component: {fileID: 6734718388117487721}
+  - component: {fileID: 383506299039533631}
   m_Layer: 5
   m_Name: AnlgesSignal
   m_TagString: Untagged
@@ -107,6 +108,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!111 &383506299039533631
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895328601835800987}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: 804730a64e84a394c9640bd2e2038f8b, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 69df5566558c9eb429171b9c38edca48, type: 2}
+  - {fileID: 7400000, guid: 804730a64e84a394c9640bd2e2038f8b, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &6822578263102363170
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,7 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -239,7 +257,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:

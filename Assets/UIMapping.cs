@@ -66,6 +66,7 @@ public class UIMapping : MonoBehaviour
 
         VerticeAngleManager.VerticeData data = MappingManager.Instance.verticeAngleManager.GetVerticeData(verticeAngle.id);
 
+        print("verticeAngle.id: "  + verticeAngle.id + "     angle " + data.angle + "   distance: "+ data.distance);
         if (data.angle == 0)
             newAnglesSignal.gameObject.SetActive(false);
         if (data.distance == 0)

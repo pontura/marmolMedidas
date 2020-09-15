@@ -16,7 +16,12 @@ public class AnglesSignal : MonoBehaviour
         if (isLocked)
         {
             GetComponent<Button>().interactable = false;
+            field.color = Color.white;
             background.color = Color.red;
+        }
+        else
+        {
+            field.color = Color.black;
         }
         this.verticeAngle = _verticeAngle;
         field.text = Utils.RoundNumber(verticeAngle.angle, 2).ToString() + "°";        
@@ -24,5 +29,13 @@ public class AnglesSignal : MonoBehaviour
     public void Clicked()
     {
         MappingManager.Instance.VerticeClicked(verticeAngle);
+    }
+    public void SetOn()
+    {
+        GetComponent<Animation>().Play("distanceOn");
+    }
+    public void SetOff()
+    {
+        GetComponent<Animation>().Play("distanceOff");
     }
 }

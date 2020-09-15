@@ -116,8 +116,6 @@ public class VerticeAngleManager : MonoBehaviour
         }
         float distance = originalValue * normalizedDistance;
 
-        print("originalValue: " + originalValue + " value: " + value + " result: " + result + " distance" + distance);
-
         data[angleID - 1].distance = value;
         GameObject pivot = new GameObject();
         pivot.transform.position = all[angleID - 1].transform.position;
@@ -163,15 +161,17 @@ public class VerticeAngleManager : MonoBehaviour
                 verticeAngle.transform.SetParent(container);
             id++;
         }
+        if (angleID == 0)
+            data[data.Count].angle = all[angleID].angle;
+        else
+            data[angleID - 1].angle = all[angleID].angle;
+
         Destroy(pivot);
         SetLastVetriceAsFirst();
         angleDistanceRemapping.Calculate();
         lineAsset.Refresh(this);
 
-        if(angleID == 0)
-            data[data.Count].angle = all[angleID].angle;
-        else
-            data[angleID-1].angle = all[angleID].angle;
+       
     }
     void SetLastVetriceAsFirst()
     {

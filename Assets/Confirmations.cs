@@ -31,11 +31,15 @@ public class Confirmations : MonoBehaviour
         else if (MappingManager.Instance.state == MappingManager.states.CONFIRM_ANGLES)
         {
             int nextAngleID = GetNextAngle();
-
-            if (nextAngleID >= MappingManager.Instance.verticeAngleManager.data.Count-1)
+            print("nextAngleID " + nextAngleID);
+            if (nextAngleID >= MappingManager.Instance.verticeAngleManager.data.Count - 1)
                 EndAnglesConfig();
             else if (nextAngleID > 0)
-                MappingManager.Instance.uiMapping.angles[nextAngleID].gameObject.SetActive(true);
+            {
+                AnglesSignal anglesSignal = MappingManager.Instance.uiMapping.angles[nextAngleID];
+                anglesSignal.gameObject.SetActive(true);
+                anglesSignal.SetOn();
+            }
         }
 
 
@@ -49,10 +53,18 @@ public class Confirmations : MonoBehaviour
     }
     void EndAnglesConfig()
     {
-        MappingManager.Instance.uiMapping.angles[MappingManager.Instance.uiMapping.angles.Count-1].gameObject.SetActive(true);
-        MappingManager.Instance.uiMapping.angles[0].gameObject.SetActive(true);
-        MappingManager.Instance.uiMapping.distances[0].gameObject.SetActive(true);
+        MappingManager.Instance.state = MappingManager.states.CONFIRM_ANGLE_LAST_1;
+
+        AnglesSignal anglesSignal = MappingManager.Instance.uiMapping.angles[MappingManager.Instance.uiMapping.angles.Count - 1];
+        anglesSignal.gameObject.SetActive(true);
+        anglesSignal.SetOn();
+
         Debug.Log("EndAnglesConfig");
+    }
+    void SetLastAngle1()
+    {
+        MappingManager.Instance.uiMapping.distances[0].gameObject.SetActive(true);
+        MappingManager.Instance.uiMapping.angles[0].gameObject.SetActive(true);        
     }
     int GetNextDistance()
     {

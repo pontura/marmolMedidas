@@ -10,6 +10,9 @@ public class MappingManager : MonoBehaviour
         SKETCHING,
         CONFIRM_SIZE,
         CONFIRM_ANGLES,
+        CONFIRM_ANGLE_LAST_1,
+        CONFIRM_DISTANCE_LAST,
+        CONFIRM_ANGLE_LAST_2,
         EDITING
     }
 

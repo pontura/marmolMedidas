@@ -22,7 +22,8 @@ public class LineAsset : MonoBehaviour
     void DeleteAll()
     {
         Utils.RemoveAllChildsIn(transform);
-        lineRenderer.positionCount = 0;
+        if(lineRenderer != null)
+            lineRenderer.positionCount = 0;
     }
     public void Refresh(VerticeAngleManager verticeAngleManager)
     {
