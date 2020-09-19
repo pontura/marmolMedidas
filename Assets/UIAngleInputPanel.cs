@@ -24,6 +24,7 @@ public class UIAngleInputPanel : MonoBehaviour
         this.verticeAngle = verticeAngle;
         this.originalValue = verticeAngle.angle;
         inputField.text = Utils.RoundNumber(verticeAngle.angle, 2).ToString();
+        inputField.Select();
         this.angleID = verticeAngle.id;
         panel.SetActive(true);
     }

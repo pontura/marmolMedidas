@@ -35,6 +35,7 @@ public class UISizeInputPanel : MonoBehaviour
         inputField.text = Utils.RoundNumber(distance, 2).ToString();
         this.angleID = verticeAngle.id;
         panel.SetActive(true);
+        inputField.Select();
     }
     public void Help()
     {
