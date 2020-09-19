@@ -5,8 +5,6 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     public MappingManager mappingManager;
-    bool draggingBG;
-    Vector3 positionOffset;
 
     void Update()
     {
@@ -14,26 +12,23 @@ public class InputManager : MonoBehaviour
             return;
         if (Input.GetMouseButtonDown(0))
         {
-            draggingBG = false;
             Vector3 pos = MappingManager.Instance.cam.ScreenToWorldPoint(Input.mousePosition);
 
             RaycastHit[] hits;
             hits = Physics.RaycastAll(pos, transform.forward, 100.0F);
-
+            
             for (int i = 0; i < hits.Length; i++)
             {
                 RaycastHit hit = hits[i];
+                print(hit.collider.gameObject.tag);
                 if (hit.collider.gameObject.tag == "VerticeAngle")
                 {
                     mappingManager.VerticeClicked(hit.collider.gameObject.GetComponent< VerticeAngle>());
                     return;
                 }
-            }
-            for (int i = 0; i < hits.Length; i++)
-            {
-                RaycastHit hit = hits[i];
-                if (hit.collider.gameObject.tag == "Floor" && mappingManager.state != MappingManager.states.SKETCHING)
+                else if (hit.collider.gameObject.tag == "Floor" && mappingManager.state == MappingManager.states.SKETCHING)
                 {
+                    print("b");
                     mappingManager.ClickOnFloor(pos);
                 }
             }

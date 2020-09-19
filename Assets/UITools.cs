@@ -17,6 +17,7 @@ public class UITools : MonoBehaviour
     }
     public void DeleteAll()
     {
+        GetComponent<UIIntro>().Init();
         Events.DeleteAll();
     }
 }
