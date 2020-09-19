@@ -10,14 +10,12 @@ public class MappingManager : MonoBehaviour
         SKETCHING,
         CONFIRM_SIZE,
         CONFIRM_ANGLES,
-        CONFIRM_ANGLE_LAST_1,
-        CONFIRM_DISTANCE_LAST,
-        CONFIRM_ANGLE_LAST_2,
+        CONFIRM_LAST_DISTANCE,
         EDITING
     }
 
-    [HideInInspector] public VerticeAngleManager verticeAngleManager;
-    [HideInInspector] public Confirmations confirmations;
+    public VerticeAngleManager verticeAngleManager;
+    public Confirmations confirmations;
 
     static MappingManager mInstance = null;
     public string newScene;
@@ -40,8 +38,6 @@ public class MappingManager : MonoBehaviour
         gameObject.SetActive(true);
         uiMapping.Init();
         ChangeStateTo(states.SKETCHING);
-        verticeAngleManager = GetComponent<VerticeAngleManager>();
-        confirmations = GetComponent<Confirmations>();
 
         if(forceSquare)
             Invoke("ForceSquare", 0.1f);

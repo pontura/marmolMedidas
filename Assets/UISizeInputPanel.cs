@@ -44,6 +44,7 @@ public class UISizeInputPanel : MonoBehaviour
     {
         if (value == 0)
             return;
+
         VerticeAngleManager verticeAngleManager = MappingManager.Instance.verticeAngleManager;
         verticeAngleManager.ChangeDistance(angleID, originalValue, value);
         verticeAngleManager.ConfirmDistance(verticeAngle.id - 1);

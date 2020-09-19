@@ -5,6 +5,8 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     public MappingManager mappingManager;
+    bool draggingBG;
+    Vector3 positionOffset;
 
     void Update()
     {
@@ -12,6 +14,7 @@ public class InputManager : MonoBehaviour
             return;
         if (Input.GetMouseButtonDown(0))
         {
+            draggingBG = false;
             Vector3 pos = MappingManager.Instance.cam.ScreenToWorldPoint(Input.mousePosition);
 
             RaycastHit[] hits;
@@ -29,9 +32,11 @@ public class InputManager : MonoBehaviour
             for (int i = 0; i < hits.Length; i++)
             {
                 RaycastHit hit = hits[i];
-                if (hit.collider.gameObject.tag == "Floor")
+                if (hit.collider.gameObject.tag == "Floor" && mappingManager.state != MappingManager.states.SKETCHING)
+                {
                     mappingManager.ClickOnFloor(pos);
+                }
             }
-        }
+        } 
     }
 }

@@ -24,7 +24,7 @@ public class DistanceSignal : MonoBehaviour
         {
             field.color = Color.black;
             Invoke("Delayed", 0.1f);
-        }      
+        }
     }
     void Delayed()
     {
@@ -47,5 +47,15 @@ public class DistanceSignal : MonoBehaviour
     public void SetOn()
     {
         GetComponent<Animation>().Play("distanceOn");
+    }
+    public void SetLastDistance()
+    {
+        GetComponent<Animation>().Stop();
+        GetComponent<Button>().interactable = false;
+        gameObject.SetActive(true);
+        field.color = Color.white;
+        background.color = Color.black;
+        float value = MappingManager.Instance.verticeAngleManager.data[MappingManager.Instance.verticeAngleManager.data.Count - 1].distance;
+        field.text = Utils.RoundNumber(value, 2).ToString();
     }
 }

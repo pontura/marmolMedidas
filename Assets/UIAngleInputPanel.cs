@@ -29,8 +29,10 @@ public class UIAngleInputPanel : MonoBehaviour
     }
     public void SetNewAngle(float value)
     {
+
         MappingManager.Instance.verticeAngleManager.ChangeAngle(angleID, originalValue, value);
         MappingManager.Instance.verticeAngleManager.ConfirmAngle(verticeAngle.id - 1);
+
         MappingManager.Instance.confirmations.SetNextConfirm();
         Close();
     }

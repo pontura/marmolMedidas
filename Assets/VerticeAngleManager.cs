@@ -24,7 +24,6 @@ public class VerticeAngleManager : MonoBehaviour
     {
         Events.DeleteAll -= DeleteAll;
     }
-
     public void ConfirmDistance(int id)
     {       
         data[id].distanceChecked = true;
@@ -102,7 +101,8 @@ public class VerticeAngleManager : MonoBehaviour
     }
     public void ChangeDistance(int angleID, float originalValue, float value)
     {
-        float result = 1;
+        MappingManager.Instance.ChangeStateTo(MappingManager.states.CONFIRM_SIZE);
+        float scaleChanged = 1;
        
         if(angleID - 1 == 0 && data[0].distance == 0)
         {
@@ -112,35 +112,51 @@ public class VerticeAngleManager : MonoBehaviour
         }
         else
         {
-            result = value / originalValue / normalizedDistance;
+            scaleChanged = value / originalValue / normalizedDistance;
         }
         float distance = originalValue * normalizedDistance;
 
         data[angleID - 1].distance = value;
-        GameObject pivot = new GameObject();
-        pivot.transform.position = all[angleID - 1].transform.position;
 
-        VerticeAngle angle2 = all[angleID];
-        angle2.transform.SetParent(pivot.transform);
+        RePositionateVertices(angleID, scaleChanged);
 
-        float d = result;
-        pivot.transform.localScale = new Vector3(d,d,d);
+        //  if (!data[angleID - 1].distanceChecked && angleID - 1 == 1 && MappingManager.Instance.forceSquare)
+        //      ForceSquaredFigure();
 
-        angle2.transform.SetParent(container);
-        angle2.transform.localScale = Vector3.one;
-
-        if (!data[angleID - 1].distanceChecked && angleID - 1 == 1 && MappingManager.Instance.forceSquare)
-            ForceSquaredFigure();
-
-        Destroy(pivot);
+        
         SetLastVetriceAsFirst();
         angleDistanceRemapping.Calculate();
         lineAsset.Refresh(this);
         RefreshVerticeData();
+        Invoke("Recenter", 0.1f);
+    }
+    void RePositionateVertices(int angleID, float scaleChanged)
+    {
+        VerticeAngle a1 = all[angleID]; //el angulo1 a mover
+        Vector3 originalPos = a1.transform.position;
+
+        GameObject pivot = new GameObject();
+        pivot.transform.position = all[angleID - 1].transform.position;
+        a1.transform.SetParent(pivot.transform);
+        pivot.transform.localScale = new Vector3(scaleChanged, scaleChanged, scaleChanged);
+        a1.transform.SetParent(container);
+        Destroy(pivot);
+
+        a1.transform.localScale = Vector3.one;
+
+        Vector3 diffPosition = originalPos - a1.transform.position;
+
+        for (int a = angleID+1; a < all.Count - 1; a++)
+        {
+            all[a].transform.position -= diffPosition;
+        }
+        
+
     }
     public void ChangeAngle(int angleID, float originalValue, float value)
     {
-        
+        print("change angle " + angleID + "    originalValue : " + originalValue + "     value: " + value);
+        all[angleID].angle = value;
         value = originalValue - value;
         GameObject pivot = new GameObject();
         pivot.transform.position = all[angleID].transform.position;
@@ -170,12 +186,16 @@ public class VerticeAngleManager : MonoBehaviour
         SetLastVetriceAsFirst();
         angleDistanceRemapping.Calculate();
         lineAsset.Refresh(this);
-
+        Invoke("Recenter", 0.1f);
        
     }
     void SetLastVetriceAsFirst()
     {
         all[all.Count - 1].transform.position = all[0].transform.position;
+    }
+    void Recenter()
+    {
+        Events.Recenter();
     }
     
 }

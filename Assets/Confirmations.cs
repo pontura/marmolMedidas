@@ -31,40 +31,41 @@ public class Confirmations : MonoBehaviour
         else if (MappingManager.Instance.state == MappingManager.states.CONFIRM_ANGLES)
         {
             int nextAngleID = GetNextAngle();
-            print("nextAngleID " + nextAngleID);
             if (nextAngleID >= MappingManager.Instance.verticeAngleManager.data.Count - 1)
-                EndAnglesConfig();
-            else if (nextAngleID > 0)
             {
-                AnglesSignal anglesSignal = MappingManager.Instance.uiMapping.angles[nextAngleID];
-                anglesSignal.gameObject.SetActive(true);
-                anglesSignal.SetOn();
+                EndAngleConfig();
             }
+            else if (nextAngleID > 0)
+                SetAngleOn(nextAngleID, true);
         }
-
-
+        if (MappingManager.Instance.state == MappingManager.states.CONFIRM_LAST_DISTANCE)
+        {
+            EndAngleConfig();
+        }
     }
     void EndDistanceConfig()
     {
-       // MappingManager.Instance.ui.distances[0].gameObject.SetActive(true);
         MappingManager.Instance.ConfirmAngles();
         id = 1;
         SetNextConfirm();
     }
-    void EndAnglesConfig()
+    void EndAngleConfig()
     {
-        MappingManager.Instance.state = MappingManager.states.CONFIRM_ANGLE_LAST_1;
-
-        AnglesSignal anglesSignal = MappingManager.Instance.uiMapping.angles[MappingManager.Instance.uiMapping.angles.Count - 1];
-        anglesSignal.gameObject.SetActive(true);
-        anglesSignal.SetOn();
-
-        Debug.Log("EndAnglesConfig");
+        print("EndAngleConfig");
+        MappingManager.Instance.ChangeStateTo(MappingManager.states.CONFIRM_LAST_DISTANCE);
+        SetAngleOn(0, false);
+        SetAngleOn(MappingManager.Instance.uiMapping.angles.Count - 1, false);
+        DistanceSignal ds = MappingManager.Instance.uiMapping.distances[0];
+        ds.SetLastDistance();
     }
-    void SetLastAngle1()
+    void SetAngleOn(int angleID, bool canBeClicked)
     {
-        MappingManager.Instance.uiMapping.distances[0].gameObject.SetActive(true);
-        MappingManager.Instance.uiMapping.angles[0].gameObject.SetActive(true);        
+        AnglesSignal anglesSignal = MappingManager.Instance.uiMapping.angles[angleID];
+        anglesSignal.gameObject.SetActive(true);
+        if (canBeClicked)
+            anglesSignal.SetOn();
+        else
+            anglesSignal.SetLastAngles();
     }
     int GetNextDistance()
     {

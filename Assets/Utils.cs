@@ -45,8 +45,6 @@ public static class Utils {
 	}
 	public static string FormatNumbers(int num)
 	{
-        return ToFormattedString(num);
-
         return string.Format ("{0:#,#}",  num);
 	}
     public static float RoundNumber(float value, int digits)
