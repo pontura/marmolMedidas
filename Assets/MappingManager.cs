@@ -23,6 +23,7 @@ public class MappingManager : MonoBehaviour
     public UIMapping uiMapping;
     public UIMain ui;
     public bool forceSquare; // por si eligio partir de un rectangulo:
+    public UIMeassure uImeassure;
 
     public static MappingManager Instance
     {
@@ -79,6 +80,10 @@ public class MappingManager : MonoBehaviour
     {
         this.state = state;
         ui.ChangeState(state);
+        if (state == states.CONFIRM_LAST_DISTANCE)
+            uImeassure.Init();
+        else
+            uImeassure.Reset();
     }
     public void Reset()
     {

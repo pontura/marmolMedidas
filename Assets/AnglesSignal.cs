@@ -8,7 +8,7 @@ public class AnglesSignal : MonoBehaviour
     public Text field;
     public Image background;
     VerticeAngle verticeAngle;
-    bool isLocked;
+    public bool isLocked;
     Button button;
 
     public void Init(VerticeAngle _verticeAngle, bool _isLocked)
@@ -30,7 +30,10 @@ public class AnglesSignal : MonoBehaviour
     }
     public void Clicked()
     {
-        MappingManager.Instance.VerticeClicked(verticeAngle);
+        if (MappingManager.Instance.uImeassure.isOn)
+            MappingManager.Instance.uImeassure.OnAddPoint(verticeAngle);
+        else
+            MappingManager.Instance.VerticeClicked(verticeAngle);
     }
     public void SetOn()
     {
@@ -44,10 +47,12 @@ public class AnglesSignal : MonoBehaviour
     }
     public void SetLastAngles()
     {
+        isLocked = true;
         gameObject.SetActive(true);
         GetComponent<Animation>().Stop();       
         background.color = Color.black;
         field.color = Color.white;
+        SetInteraction(true);
     }
     void SetInteraction(bool isOn)
     {

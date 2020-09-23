@@ -55,7 +55,12 @@ public class DistanceSignal : MonoBehaviour
         gameObject.SetActive(true);
         field.color = Color.white;
         background.color = Color.black;
-        float value = MappingManager.Instance.verticeAngleManager.data[MappingManager.Instance.verticeAngleManager.data.Count - 1].distance;
-        field.text = Utils.RoundNumber(value, 2).ToString();
+        int total = MappingManager.Instance.verticeAngleManager.all.Count;
+        Vector3 vertice1 = MappingManager.Instance.verticeAngleManager.all[total-2].transform.position;
+        Vector3 vertice2 = MappingManager.Instance.verticeAngleManager.all[total-1].transform.position;
+        float distanceInPixels = Vector3.Distance(vertice1, vertice2);
+        float value = MappingManager.Instance.verticeAngleManager.GetDistanceInCm(distanceInPixels);
+        MappingManager.Instance.verticeAngleManager.data[MappingManager.Instance.verticeAngleManager.data.Count - 1].distance = value;
+        field.text = Utils.RoundNumber(value, 2).ToString() + "cm";
     }
 }
