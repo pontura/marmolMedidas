@@ -15,15 +15,11 @@ public class AnglesSignal : MonoBehaviour
     {
         this.isLocked = _isLocked;
         button = GetComponent<Button>();
+
         if (isLocked)
         {
-            SetInteraction(false);
-            field.color = Color.white;
+            SetInteraction(false);            
             background.color = Color.red;
-        }
-        else
-        {
-            field.color = Color.black;
         }
         this.verticeAngle = _verticeAngle;
         field.text = Utils.RoundNumber(verticeAngle.angle, 2).ToString() + "°";        
@@ -39,7 +35,6 @@ public class AnglesSignal : MonoBehaviour
     {
         GetComponent<Animation>().Play("distanceOn");
         SetInteraction(true);
-        field.color = Color.black;
     }
     public void SetOff()
     {
@@ -51,7 +46,6 @@ public class AnglesSignal : MonoBehaviour
         gameObject.SetActive(true);
         GetComponent<Animation>().Stop();       
         background.color = Color.black;
-        field.color = Color.white;
         SetInteraction(true);
     }
     void SetInteraction(bool isOn)

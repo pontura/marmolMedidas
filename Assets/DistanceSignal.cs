@@ -18,11 +18,9 @@ public class DistanceSignal : MonoBehaviour
             GetComponent<Button>().interactable = false;
             background.color = Color.red;
             field.text = "?";
-            field.color = Color.white;
         }
         else
         {
-            field.color = Color.black;
             Invoke("Delayed", 0.1f);
         }
     }
@@ -53,7 +51,6 @@ public class DistanceSignal : MonoBehaviour
         GetComponent<Animation>().Stop();
         GetComponent<Button>().interactable = false;
         gameObject.SetActive(true);
-        field.color = Color.white;
         background.color = Color.black;
         int total = MappingManager.Instance.verticeAngleManager.all.Count;
         Vector3 vertice1 = MappingManager.Instance.verticeAngleManager.all[total-2].transform.position;
