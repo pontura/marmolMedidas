@@ -53,21 +53,22 @@ public class UIMapping : MonoBehaviour
         DistanceSignal newDistanceSignal = Instantiate(distanceSignal, Vector3.Lerp(pos, pos2, 0.5f), Quaternion.identity, container);
 
         int totalVertices = MappingManager.Instance.verticeAngleManager.all.Count-1;
+
         bool angleLocked = false;
         if (verticeAngle.id == 0 || verticeAngle.id >= totalVertices - 1)
             angleLocked = true;
 
-        bool distanceLocked = false;
-        if (verticeAngle.id == 0)
-            distanceLocked = true;        
+       
 
-        newAnglesSignal.Init(verticeAngle, angleLocked);
-        newDistanceSignal.Init(verticeAngle, distanceLocked);
+        VerticeAngleManager.VerticeData data = MappingManager.Instance.verticeAngleManager.GetVerticeData(verticeAngle.id);
+
+        newAnglesSignal.Init(verticeAngle, data);
+        newDistanceSignal.Init(verticeAngle, data);
 
         angles.Add(newAnglesSignal);
         distances.Add(newDistanceSignal);
 
-        VerticeAngleManager.VerticeData data = MappingManager.Instance.verticeAngleManager.GetVerticeData(verticeAngle.id);
+       
 
         if (data.angle == 0)
             newAnglesSignal.gameObject.SetActive(false);

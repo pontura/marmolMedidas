@@ -20,7 +20,7 @@ public class InputManager : MonoBehaviour
             for (int i = 0; i < hits.Length; i++)
             {
                 RaycastHit hit = hits[i];
-                print(hit.collider.gameObject.tag);
+               // print(hit.collider.gameObject.tag);
                 if (hit.collider.gameObject.tag == "VerticeAngle")
                 {
                     mappingManager.VerticeClicked(hit.collider.gameObject.GetComponent< VerticeAngle>());
@@ -28,7 +28,7 @@ public class InputManager : MonoBehaviour
                 }
                 else if (hit.collider.gameObject.tag == "Floor" && mappingManager.state == MappingManager.states.SKETCHING)
                 {
-                    print("b");
+                   // print("b");
                     mappingManager.ClickOnFloor(pos);
                 }
             }

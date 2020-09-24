@@ -14,6 +14,8 @@ public class VerticeAngleManager : MonoBehaviour
         public float distance;
         public bool distanceChecked;
         public bool angleChecked;
+        public bool angleLocked;
+        public bool is180Angle;
     }
     private void Start()
     {
@@ -74,6 +76,24 @@ public class VerticeAngleManager : MonoBehaviour
         }
        
     }
+    public void AddVAngleCostilla(VerticeAngle originalAngle, Vector3 pos)
+    {
+        pos.z = 0;
+        VerticeAngle go = Instantiate(verticeAngle_to_add, pos, Quaternion.identity, container);
+        all.Insert(originalAngle.id, go);
+        lineAsset.Refresh(this);
+        go.Init(false);
+        VerticeData vd = new VerticeData();
+        vd.angle = 179.99f;
+        int id = originalAngle.id - 1;
+        if (id < 0)  id = data.Count - 1;
+        vd.distance = data[id].distance / 2;
+        vd.angleChecked = true;
+        vd.angleLocked = true;
+        vd.distanceChecked = true;
+        data.Insert(id, vd);
+        angleDistanceRemapping.Calculate();
+    }
     public void AddVAngle(Vector3 pos, bool isLast = false)
     {
         pos.z = 0;
@@ -107,7 +127,7 @@ public class VerticeAngleManager : MonoBehaviour
         if(angleID - 1 == 0 && data[0].distance == 0)
         {
             //first meassure:
-            print("First Time Meassure");
+           // print("First Time Meassure");
             normalizedDistance = value / originalValue;
         }
         else
@@ -155,32 +175,45 @@ public class VerticeAngleManager : MonoBehaviour
     }
     public void ChangeAngle(int angleID, float originalValue, float value)
     {
-        print("change angle " + angleID + "    originalValue : " + originalValue + "     value: " + value);
+       
         all[angleID].angle = value;
-        value = originalValue - value;
+        float pivotRotation;
+
+        bool isOpeningAnlge = IsCenterNearer(angleID);
+        if (isOpeningAnlge)
+            pivotRotation = originalValue - value;
+        else
+            pivotRotation = value - originalValue;
+
+       // print("change angle " + angleID + "    originalValue : " + originalValue + "     value: " + value + " pivotRotation_ " + pivotRotation + " isOpeningAnlge: " + isOpeningAnlge);
+
         GameObject pivot = new GameObject();
         pivot.transform.position = all[angleID].transform.position;
-        int id = 0;
+
         foreach (VerticeAngle verticeAngle in all)
         {
-            if (id > angleID)
+            if (verticeAngle.id > angleID)
                 verticeAngle.transform.SetParent(pivot.transform);
-                id++;
         }
         Vector3 rot = pivot.transform.localEulerAngles;
-        rot.z += value;
+        rot.z = pivotRotation;
         pivot.transform.localEulerAngles = rot;
 
         foreach (VerticeAngle verticeAngle in all)
         {
-            if (id > angleID)
+            if (verticeAngle.id > angleID)
                 verticeAngle.transform.SetParent(container);
-            id++;
         }
+        VerticeData vData;
         if (angleID == 0)
-            data[data.Count].angle = all[angleID].angle;
+            vData = data[data.Count];
         else
-            data[angleID - 1].angle = all[angleID].angle;
+            vData = data[angleID - 1];
+
+        vData.angle = all[angleID].angle;
+
+        if (all[angleID].angle > 179.98f)
+            vData.is180Angle = true;
 
         Destroy(pivot);
         SetLastVetriceAsFirst();
@@ -188,6 +221,16 @@ public class VerticeAngleManager : MonoBehaviour
         lineAsset.Refresh(this);
         Invoke("Recenter", 0.1f);
        
+    }
+    bool IsCenterNearer(int angleID)// se fija que el angulo se abra hacia el centro o se cierre:
+    {
+        Vector3 myPos = all[angleID].transform.position;
+        Vector3 anglePrevPos = all[angleID - 1].transform.position;
+        Vector3 angleNextPos = all[angleID + 1].transform.position;
+        Vector3 centerPos = Vector3.Lerp(anglePrevPos, angleNextPos, 0.5f);
+        if ((Mathf.Abs(centerPos.x) + Mathf.Abs(centerPos.y)) < (Mathf.Abs(myPos.x) + Mathf.Abs(myPos.y)))
+            return true;
+        return false;
     }
     void SetLastVetriceAsFirst()
     {

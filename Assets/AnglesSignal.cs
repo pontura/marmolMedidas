@@ -5,30 +5,40 @@ using UnityEngine.UI;
 
 public class AnglesSignal : MonoBehaviour
 {
+    public GameObject angle180;
     public Text field;
     public Image background;
     VerticeAngle verticeAngle;
-    public bool isLocked;
+    VerticeAngleManager.VerticeData verticeData;
     Button button;
 
-    public void Init(VerticeAngle _verticeAngle, bool _isLocked)
+    public void Init(VerticeAngle _verticeAngle, VerticeAngleManager.VerticeData verticeData)
     {
-        this.isLocked = _isLocked;
+        this.verticeData = verticeData;
         button = GetComponent<Button>();
-
-        if (isLocked)
+       
+        if (_verticeAngle.id == 0 || _verticeAngle.id >= MappingManager.Instance.verticeAngleManager.all.Count - 1)
         {
             SetInteraction(false);            
             background.color = Color.red;
         }
         this.verticeAngle = _verticeAngle;
-        field.text = Utils.RoundNumber(verticeAngle.angle, 2).ToString() + "°";        
+        field.text = Utils.RoundNumber(verticeAngle.angle, 1).ToString() + "°";
+
+        if (verticeData.is180Angle)
+        {
+            angle180.SetActive(true);
+            field.text = "";
+        } else
+            angle180.SetActive(false);
     }
     public void Clicked()
     {
-        if (MappingManager.Instance.uImeassure.isOn)
+        if (MappingManager.Instance.uICostillas.isOn)
+            MappingManager.Instance.uICostillas.OnAddPoint(verticeAngle);
+        else if(MappingManager.Instance.uImeassure.isOn)
             MappingManager.Instance.uImeassure.OnAddPoint(verticeAngle);
-        else
+        else if (!verticeData.is180Angle && !verticeData.angleLocked)
             MappingManager.Instance.VerticeClicked(verticeAngle);
     }
     public void SetOn()
@@ -42,7 +52,7 @@ public class AnglesSignal : MonoBehaviour
     }
     public void SetLastAngles()
     {
-        isLocked = true;
+        verticeData.angleLocked = true;
         gameObject.SetActive(true);
         GetComponent<Animation>().Stop();       
         background.color = Color.black;

@@ -49,7 +49,7 @@ public static class Utils {
 	}
     public static float RoundNumber(float value, int digits)
     {
-        float mult = Mathf.Pow(10.0f, (float)digits);
+        float mult = Mathf.Pow(10.0f, (float)1);
         return Mathf.Round(value * mult) / mult;
     }
     public static string ToFormattedString(this double rawNumber)

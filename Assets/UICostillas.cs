@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIMeassure : MonoBehaviour
+public class UICostillas : MonoBehaviour
 {
-    public GameObject uiMessureButton;
+    public GameObject uiCostillaButton;
     public GameObject swapButtonOn;
-    
+
     public Transform container;
     public bool isOn;
-    public MeassureSignal signal;
-    public MessurePoint mPoint;
+    public CostillaSignal signal;
+    public CostillaPoint mPoint;
     public int id;
     VerticeAngle verticeAngle1;
     VerticeAngle verticeAngle2;
@@ -26,15 +26,15 @@ public class UIMeassure : MonoBehaviour
     }
     public void Init()
     {
-        uiMessureButton.SetActive(true);
+        uiCostillaButton.SetActive(true);
     }
     public void Reset()
     {
-        uiMessureButton.SetActive(false);
+        uiCostillaButton.SetActive(false);
     }
     public void SetOff()
     {
-        if (GetComponent<UICostillas>().isOn) GetComponent<UICostillas>().SetOff();
+        if(GetComponent<UIMeassure>().isOn) GetComponent<UIMeassure>().SetOff();
         ResetValues();
         swapButtonOn.SetActive(false);
         isOn = false;
@@ -51,6 +51,8 @@ public class UIMeassure : MonoBehaviour
     }
     public void OnAddPoint(VerticeAngle verticeAngle)
     {
+        if (id > 1)
+            id = 0;
         if (id == 0)
         {
             verticeAngle1 = verticeAngle;
@@ -63,11 +65,11 @@ public class UIMeassure : MonoBehaviour
             AddFinalStep();
             AddLine();
         }
-        else
-        {
-            ResetValues();
-            return;
-        }
+        //else
+        //{
+        //    ResetValues();
+        //    return;
+        //}
         id++;
     }
     public void Close()
@@ -84,16 +86,16 @@ public class UIMeassure : MonoBehaviour
     }
     void AddPart(VerticeAngle verticeAngle)
     {
-        MessurePoint newPoint = Instantiate(mPoint, verticeAngle.transform.position, Quaternion.identity, container);
+        CostillaPoint newPoint = Instantiate(mPoint, verticeAngle.transform.position, Quaternion.identity, container);
         newPoint.Init(this);
     }
     void AddFinalStep()
     {
-        Vector3 pos = Vector3.Lerp(verticeAngle1.transform.position,verticeAngle2.transform.position, 0.5f);
-        MeassureSignal newSignal = Instantiate(signal, pos, Quaternion.identity, container);
+        Vector3 pos = Vector3.Lerp(verticeAngle1.transform.position, verticeAngle2.transform.position, 0.5f);
+        CostillaSignal newSignal = Instantiate(signal, pos, Quaternion.identity, container);
         newSignal.Init(this, verticeAngle1.transform.position, verticeAngle2.transform.position);
     }
-    public void DelettePoint(MessurePoint mPoint)
+    public void DelettePoint(CostillaPoint mPoint)
     {
         ResetValues();
     }

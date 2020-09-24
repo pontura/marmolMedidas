@@ -24,6 +24,7 @@ public class MappingManager : MonoBehaviour
     public UIMain ui;
     public bool forceSquare; // por si eligio partir de un rectangulo:
     public UIMeassure uImeassure;
+    public UICostillas uICostillas;
 
     public static MappingManager Instance
     {
@@ -49,6 +50,14 @@ public class MappingManager : MonoBehaviour
             JumpToConfirm();
         else
             uiMapping.angleInputPanel.Init(verticeAngle);
+    }
+    public void DistanceSignalClicked(DistanceSignal singleLineAsset)
+    {
+        if (state == states.CONFIRM_LAST_DISTANCE)
+        {
+            print("::::::::::::::::::::::::::::::");
+            verticeAngleManager.AddVAngle(singleLineAsset.transform.position);
+        }
     }
     public void SizeClicked(VerticeAngle verticeAngle)
     {
@@ -81,9 +90,15 @@ public class MappingManager : MonoBehaviour
         this.state = state;
         ui.ChangeState(state);
         if (state == states.CONFIRM_LAST_DISTANCE)
+        {
             uImeassure.Init();
+            uICostillas.Init();
+        }
         else
+        {
             uImeassure.Reset();
+            uICostillas.Reset();
+        }            
     }
     public void Reset()
     {

@@ -16,14 +16,20 @@ public class UIMain : MonoBehaviour
         uiIntro.Init();
         mapping.gameObject.SetActive(false);
     }
+    void ResetUIs()
+    {
+        MappingManager.Instance.uImeassure.SetOff();
+        MappingManager.Instance.uICostillas.SetOff();
+    }
     public void ChangeState(MappingManager.states state)
     {
         switch (state)
         {
-            case MappingManager.states.SKETCHING: SetTitle("Marca los vertices externos"); break;
+            case MappingManager.states.SKETCHING: SetTitle("Marca los vertices externos"); ResetUIs(); break;
             case MappingManager.states.CONFIRM_SIZE: SetTitle("Mide cada lado"); break;
             case MappingManager.states.CONFIRM_ANGLES: SetTitle("Confirma cada ángulo"); break;
             case MappingManager.states.EDITING: SetTitle("Edición final"); break;
+            case MappingManager.states.CONFIRM_LAST_DISTANCE: SetTitle("Confirma la última medida (en negro)"); break;
         }
     }
     void SetTitle(string text)

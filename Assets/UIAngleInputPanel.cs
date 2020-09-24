@@ -48,7 +48,11 @@ public class UIAngleInputPanel : MonoBehaviour
                 SetValueByField();
         });
     }
-    void Close()
+    public void Set180Angle()
+    {
+        SetNewAngle(180);
+    }
+    public void Close()
     {
         panel.SetActive(false);
     }
@@ -130,7 +134,7 @@ public class UIAngleInputPanel : MonoBehaviour
     {
         if (!Input.gyro.enabled)
             return;
-        debugField.text = Utils.RoundNumber(Input.gyro.attitude.eulerAngles.z, 3) + "°";
+        debugField.text = Utils.RoundNumber(Input.gyro.attitude.eulerAngles.z, 1) + "°";
         if (state != states.CALCULATING_1 && state != states.CALCULATING_2)
             return;
         float newAngle = Utils.RoundNumber(Input.gyro.attitude.eulerAngles.z, 1);
