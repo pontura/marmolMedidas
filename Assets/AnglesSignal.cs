@@ -38,7 +38,9 @@ public class AnglesSignal : MonoBehaviour
             MappingManager.Instance.uICostillas.OnAddPoint(verticeAngle);
         else if(MappingManager.Instance.uImeassure.isOn)
             MappingManager.Instance.uImeassure.OnAddPoint(verticeAngle);
-        else if (!verticeData.is180Angle && !verticeData.angleLocked)
+        else if (
+            //!verticeData.is180Angle && 
+            !verticeData.angleLocked)
             MappingManager.Instance.VerticeClicked(verticeAngle);
     }
     public void SetOn()

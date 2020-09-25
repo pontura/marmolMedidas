@@ -231,7 +231,7 @@ public class VerticeAngleManager : MonoBehaviour
         Vector3 newCenterPos = Vector3.Lerp(anglePrevPos, angleNextPos, 0.5f);
         if (Vector3.Distance(centerPos, newCenterPos) < Vector3.Distance(myPos, centerPos))
         {
-            centerPos = newCenterPos;
+           // centerPos = newCenterPos;
             return true;
         }
         return false;
