@@ -179,7 +179,7 @@ public class VerticeAngleManager : MonoBehaviour
         all[angleID].angle = value;
         float pivotRotation;
 
-        bool isOpeningAnlge = IsCenterNearer(angleID);
+        bool isOpeningAnlge = IsAnlgeCenterNearer(angleID);
         if (isOpeningAnlge)
             pivotRotation = originalValue - value;
         else
@@ -222,14 +222,18 @@ public class VerticeAngleManager : MonoBehaviour
         Invoke("Recenter", 0.1f);
        
     }
-    bool IsCenterNearer(int angleID)// se fija que el angulo se abra hacia el centro o se cierre:
+    Vector3 centerPos;
+    bool IsAnlgeCenterNearer(int angleID)// se fija que el angulo se abra hacia el centro o se cierre:
     {
         Vector3 myPos = all[angleID].transform.position;
         Vector3 anglePrevPos = all[angleID - 1].transform.position;
         Vector3 angleNextPos = all[angleID + 1].transform.position;
-        Vector3 centerPos = Vector3.Lerp(anglePrevPos, angleNextPos, 0.5f);
-        if ((Mathf.Abs(centerPos.x) + Mathf.Abs(centerPos.y)) < (Mathf.Abs(myPos.x) + Mathf.Abs(myPos.y)))
+        Vector3 newCenterPos = Vector3.Lerp(anglePrevPos, angleNextPos, 0.5f);
+        if (Vector3.Distance(centerPos, newCenterPos) < Vector3.Distance(myPos, centerPos))
+        {
+            centerPos = newCenterPos;
             return true;
+        }
         return false;
     }
     void SetLastVetriceAsFirst()
