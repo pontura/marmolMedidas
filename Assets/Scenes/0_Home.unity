@@ -6053,6 +6053,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mappingManager: {fileID: 1218146860}
+  orientation: {x: 0, y: 0, z: 1}
+  originalRaycastPos: -10
 --- !u!114 &1218146864
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6065,6 +6067,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ada1c91da4f31bf40a0202fd2a553594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  polygonCreator: {fileID: 105513123574850911, guid: 3c9834e613c3b0a47a36fde14cda34e7,
+    type: 3}
   angle: 0
 --- !u!114 &1218146865
 MonoBehaviour:

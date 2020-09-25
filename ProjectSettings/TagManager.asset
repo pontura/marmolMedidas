@@ -7,6 +7,7 @@ TagManager:
   - Floor
   - VerticeAngle
   - LineAsset
+  - Marmol
   layers:
   - Default
   - TransparentFX

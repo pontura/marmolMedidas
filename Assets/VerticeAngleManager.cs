@@ -5,6 +5,7 @@ using System;
 
 public class VerticeAngleManager : MonoBehaviour
 {
+    
     public float normalizedDistance = 1;
     public List<VerticeData> data;
     [Serializable]
@@ -74,7 +75,6 @@ public class VerticeAngleManager : MonoBehaviour
                 data[id - 1].distance = GetDistanceInCm(lastDistance_in_pixels);
             id++;
         }
-       
     }
     public void AddVAngleCostilla(VerticeAngle originalAngle, Vector3 pos)
     {
@@ -112,7 +112,9 @@ public class VerticeAngleManager : MonoBehaviour
         }
         AddVAngle(all[0].transform.position, true);
         angleDistanceRemapping.Calculate();
+        
     }
+   
     public void DeleteAll()
     {
         Utils.RemoveAllChildsIn(container);
@@ -179,13 +181,13 @@ public class VerticeAngleManager : MonoBehaviour
         all[angleID].angle = value;
         float pivotRotation;
 
-        bool isOpeningAnlge = IsAnlgeCenterNearer(angleID);
+        bool isOpeningAnlge = IsOpenedAngle(angleID);
         if (isOpeningAnlge)
             pivotRotation = originalValue - value;
         else
             pivotRotation = value - originalValue;
 
-       // print("change angle " + angleID + "    originalValue : " + originalValue + "     value: " + value + " pivotRotation_ " + pivotRotation + " isOpeningAnlge: " + isOpeningAnlge);
+       // print("_isOpeningAnlge: " + isOpeningAnlge + "   change angle " + angleID + "    originalValue : " + originalValue + "     value: " + value + " pivotRotation_ " + pivotRotation );
 
         GameObject pivot = new GameObject();
         pivot.transform.position = all[angleID].transform.position;
@@ -223,17 +225,28 @@ public class VerticeAngleManager : MonoBehaviour
        
     }
     Vector3 centerPos;
-    bool IsAnlgeCenterNearer(int angleID)// se fija que el angulo se abra hacia el centro o se cierre:
+    bool IsOpenedAngle(int angleID)// se fija que el angulo se abra hacia el centro o se cierre:
     {
         Vector3 myPos = all[angleID].transform.position;
         Vector3 anglePrevPos = all[angleID - 1].transform.position;
         Vector3 angleNextPos = all[angleID + 1].transform.position;
         Vector3 newCenterPos = Vector3.Lerp(anglePrevPos, angleNextPos, 0.5f);
-        if (Vector3.Distance(centerPos, newCenterPos) < Vector3.Distance(myPos, centerPos))
+
+        RaycastHit2D[] hits2d;
+        newCenterPos.z = -10;
+        hits2d = Physics2D.RaycastAll(newCenterPos, Vector3.forward, 100.0F);
+        for (int i = 0; i < hits2d.Length; i++)
         {
-           // centerPos = newCenterPos;
-            return true;
+            RaycastHit2D hit = hits2d[i];
+            if (hit.collider.gameObject.tag == "Marmol")
+                return true;
         }
+
+        //if (Vector3.Distance(centerPos, newCenterPos) < Vector3.Distance(myPos, centerPos))
+        //{
+        //   // centerPos = newCenterPos;
+        //    return true;
+        //}
         return false;
     }
     void SetLastVetriceAsFirst()

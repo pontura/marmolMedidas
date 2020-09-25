@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AnglesDistanceRemapping : MonoBehaviour
 {
+    public PolygonCreator polygonCreator;
+    PolygonCreator polygonCreated;
     public float angle;
     VerticeAngleManager verticesAnglesManager;
     
@@ -28,8 +30,10 @@ public class AnglesDistanceRemapping : MonoBehaviour
             else if (a == verticesAnglesManager.all.Count - 2)
                 last = 0;
             else if (a == verticesAnglesManager.all.Count - 1)
+            {
+                UpdatePolygon();
                 return;
-
+            }
 
             Vector3 firstAngle = verticesAnglesManager.all[first].transform.position;
             Vector3 midAngle = verticesAnglesManager.all[mid].transform.position;
@@ -44,6 +48,17 @@ public class AnglesDistanceRemapping : MonoBehaviour
             MappingManager.Instance.uiMapping.OnAddAngle(verticesAnglesManager.all[mid], verticesAnglesManager.all[first]);
             id++;
         }
+    }
+    void UpdatePolygon()
+    {
+        Vector2[] vertices2D = new Vector2[verticesAnglesManager.all.Count];
+        for (int a = 0; a < verticesAnglesManager.all.Count - 1; a++)
+            vertices2D[a] = verticesAnglesManager.all[a].transform.position;
 
+        if (polygonCreated != null)
+            polygonCreated.DeleteAll();
+
+        polygonCreated = Instantiate(polygonCreator, transform);
+        polygonCreated.Init(vertices2D);
     }
 }

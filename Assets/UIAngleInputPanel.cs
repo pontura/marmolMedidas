@@ -185,7 +185,7 @@ public class UIAngleInputPanel : MonoBehaviour
         {
             angle2 = Input.gyro.attitude;
             //float value_angle1 = 90 + Quaternion.Angle(angle1, angle2);
-            float diff = Quaternion.Angle(angle1, angle2);
+            float diff = (angle2.eulerAngles.z) - (angle1.eulerAngles.z);
             if ((firstWallPressed == 1 && secondWallPressed == 2)
                 ||
                 (firstWallPressed == 2 && secondWallPressed == 1))
