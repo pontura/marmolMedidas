@@ -196,7 +196,7 @@ public class UIAngleInputPanel : MonoBehaviour
 
             result1Field.text = value_angle1.ToString();
             result2Field.text = value_angle2.ToString();
-            resultField.text = "p1: " + firstWallPressed + " p2: "  + secondWallPressed + "  a1:" + angle1.eulerAngles.z + " a2:" + angle2.eulerAngles.z;
+            resultField.text = "diff: " + diff + "p1: " + angle1 + " p2: "  + angle2 + "  a1:" + angle1.eulerAngles.z + " a2:" + angle2.eulerAngles.z;
            // resultField.text = Quaternion.Angle(angle1, angle2) + "_" + Quaternion.Angle(angle2, angle1);
             // resultField.text = "Ángulos [" + value + "°]" + " [" + value2 + "°]";
             inputField.text = value_angle1.ToString();
